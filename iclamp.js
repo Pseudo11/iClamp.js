@@ -1,3 +1,10 @@
+/*
+ *	jQuery iclamp.js 1.0
+ *
+ *	Copyright (c) victory.xiaolong
+ *
+ *	Licensed under the MIT license.
+ */
 
 ;(function($){
   'use strict';
