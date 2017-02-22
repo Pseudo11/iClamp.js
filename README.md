@@ -6,8 +6,8 @@
 
 ```html
 <head>
-    <script src="jquery.js" type="text/javascript"></script>
-    <script src="iclamp.js" type="text/javascript"></script>
+  <script src="jquery.js" type="text/javascript"></script>
+  <script src="iclamp.js" type="text/javascript"></script>
 </head>
 ```
 
@@ -17,15 +17,18 @@
 
 ```html
 <div class="container">
-	<p class="clamp-ellipsis">Lorem Ipsum is simply dummy text.</p>
+  <p class="clamp-ellipsis">Lorem Ipsum is simply dummy text.</p>
 </div>
 ```
 然后使用该插件。
 
 ```javascript
 $(document).ready(function() {
-    var $container = $('.container');
-    $container.clamp({clamp: 4});
+  var $container = $('.container');
+  $container.clamp({clamp: 4});
 });
 ```
+### 参数
+
+**clamp** *(Number).* 这个参数决定需要显示的行数。
 
