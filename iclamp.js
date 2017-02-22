@@ -1,6 +1,8 @@
 
 ;(function($){
+  'use strict';
   if($.fn.clamp) return;
+
   $.fn.clamp = function(options){
     if(this.length === 0){
       $.fn.clamp.debug('No element found for "' + this.selector + '".');
@@ -13,50 +15,73 @@
     };
 
     var $clamp = this;
-    var clampLine = options.clamp || 3;
+    console.log($clamp.contents());
+    var clampLine = options.clamp || defaultOptions.clamp;
     var clampLineHeight = $clamp.css('line-height').replace(/px/ig, '');
-    var supportsNativeClamp = typeof($clamp.style.webkitLineClamp) != 'undefined';
     $clamp.css({
-      'max-height': clampLine * clampLineHeight + 'px'
+      'max-height': clampLine * clampLineHeight + 'px',
+      'overflow': 'hidden'
     })
-    if(supportsNativeClamp) {
-      $clamp.css({
-        'display': '-webkit-box',
-        'text-overflow': 'ellipsis',
-        'overflow': 'hidden',
-        '-webkit-line-clamp': clampLine.toString(),
-        '-webkit-box-orient': 'vertical'
-      });
-      return;
-    };
-    $clamp.each(function(){
-      var $this = $(this);
-      var $content = $(this).find('span');
-      var originText = $content.text().trim();
-      var regularText = '';
+    if(isSupportNativeClamp()) return;
 
-      if($content.outerHeight() > $this.outerHeight()){
-        getRegularText(originText, originText);
+
+    var $content = $clamp.find('span');
+    var originText = $content.text().trim();
+    var regularText = '';
+
+    if($content.outerHeight() > $clamp.outerHeight()){
+      getRegularText(originText, originText);
+    }
+
+    function getRegularText(_regularText, _truncationText){
+      var _startPos = 0;
+      var _endPos = _regularText.length;
+      var _middlePos = Math.floor((_startPos + _endPos) / 2);
+      var _ellipseText = _regularText.slice(_startPos, _middlePos);
+      _truncationText = _regularText.slice(_middlePos, _endPos);
+      $content.text(regularText + _ellipseText + '...');
+
+      if(_middlePos === 0){
+        return;
+      }else if($content.outerHeight() > $clamp.outerHeight()){
+        getRegularText(_ellipseText,  _truncationText);
+      }else{
+        regularText = regularText + _ellipseText;
+        getRegularText(_truncationText, _truncationText);
       }
+    }
 
-      function getRegularText(_regularText, _truncationText){
-        var _startPos = 0; //开始位置
-        var _endPos = _regularText.length; //最后位置
-        var _middlePos = Math.floor((_startPos + _endPos) / 2);
-        _ellipseText = _regularText.slice(_startPos, _middlePos);
-        _truncationText = _regularText.slice(_middlePos, _endPos);
-        $content.text(regularText + _ellipseText + '...');
+    /**
+     * ====================================================
+     * 公共属性
+     * ====================================================
+     */
+    $.fn.clamp.defaults = {
+      clamp: 3,
+      lineHeight: 14
+    }
 
-        if(_middlePos === 0){ //开始位置与中间位置重叠，即为临界值
-          return;
-        }else if($content.outerHeight() > $this.outerHeight()){
-          getRegularText(_ellipseText,  _truncationText);
-        }else{
-          regularText = regularText + _ellipseText;
-          getRegularText(_truncationText, _truncationText);
-        }
-      }
-    });
+
+    /**
+     * ====================================================
+     * 辅助函数
+     * ====================================================
+     */
+    function isSupportNativeClamp(){
+      var supportsNativeClamp = typeof($clamp.css('-webkit-line-clamp')) != 'undefined';
+      if(supportsNativeClamp) {
+        $clamp.css({
+          'display': '-webkit-box',
+          'text-overflow': 'ellipsis',
+          '-webkit-line-clamp': clampLine.toString(),
+          '-webkit-box-orient': 'vertical'
+        });
+        return true;
+      };
+      return false;
+    }
   };
+
+
 })(window.jQuery);
 
