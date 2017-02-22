@@ -25,7 +25,7 @@
     if(isSupportNativeClamp()) return;
 
 
-    var $content = $clamp.find('span');
+    var $content = $clamp.find('.clamp-ellipsis');
     var originText = $content.text().trim();
     var regularText = '';
 
@@ -37,16 +37,16 @@
       var _startPos = 0;
       var _endPos = _regularText.length;
       var _middlePos = Math.floor((_startPos + _endPos) / 2);
-      var _ellipseText = _regularText.slice(_startPos, _middlePos);
+      var _ellipsisText = _regularText.slice(_startPos, _middlePos);
       _truncationText = _regularText.slice(_middlePos, _endPos);
-      $content.text(regularText + _ellipseText + '...');
+      $content.text(regularText + _ellipsisText + '...');
 
       if(_middlePos === 0){
         return;
       }else if($content.outerHeight() > $clamp.outerHeight()){
-        getRegularText(_ellipseText,  _truncationText);
+        getRegularText(_ellipsisText,  _truncationText);
       }else{
-        regularText = regularText + _ellipseText;
+        regularText = regularText + _ellipsisText;
         getRegularText(_truncationText, _truncationText);
       }
     }
