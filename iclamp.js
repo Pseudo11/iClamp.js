@@ -32,7 +32,7 @@
     if(isSupportNativeClamp()) return;
 
 
-    var $content = $clamp.find('.clamp-ellipsis');
+    var $content = $clamp.find('.clamp-ellipsis').css('display', 'block');
     var originText = $content.text().trim();
     var regularText = '';
 
