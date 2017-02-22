@@ -15,11 +15,11 @@
     };
 
     var $clamp = this;
-    console.log($clamp.contents());
-    var clampLine = options.clamp || defaultOptions.clamp;
-    var clampLineHeight = $clamp.css('line-height').replace(/px/ig, '');
+    var clampLine = options.clamp || 3;
+    var clampLineHeight = getLineHeight();
     $clamp.css({
-      'max-height': clampLine * clampLineHeight + 'px',
+      'line-height': clampLineHeight + 'px',
+      'height': clampLine * clampLineHeight + 'px',
       'overflow': 'hidden'
     })
     if(isSupportNativeClamp()) return;
@@ -51,22 +51,23 @@
       }
     }
 
-    /**
-     * ====================================================
-     * 公共属性
-     * ====================================================
-     */
+    // 公共属性_____________________________________________________
+
     $.fn.clamp.defaults = {
-      clamp: 3,
-      lineHeight: 14
+      clamp: 3
     }
 
 
-    /**
-     * ====================================================
-     * 辅助函数
-     * ====================================================
-     */
+    // 辅助函数_____________________________________________________
+
+    function getLineHeight(){
+      var lineHeight = $clamp.css('line-height').replace(/px/ig, '');
+      if(lineHeight === 'normal'){
+        lineHeight = parseInt($clamp.css('font-size').replace(/px/ig, '')) * 1.2;
+      }
+      return parseInt(lineHeight);
+    };
+
     function isSupportNativeClamp(){
       var supportsNativeClamp = typeof($clamp.css('-webkit-line-clamp')) != 'undefined';
       if(supportsNativeClamp) {

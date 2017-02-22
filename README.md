@@ -11,7 +11,7 @@
 </head>
 ```
 
-*Examples*
+*例子*
 
 为需要添加省略号的元素添加一个类名 clamp-ellipsis：
 
